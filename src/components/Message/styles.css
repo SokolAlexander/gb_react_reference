@@ -1,3 +1,14 @@
 .message {
-  margin-left: 10px;
+  border: 1px solid grey;
+  padding: 5px;
+  margin-top: 5px;
+  border-radius: 8px;
+}
+
+.messageBot {
+  align-self: flex-start;
+}
+
+.messageHuman {
+  align-self: flex-end;
 }

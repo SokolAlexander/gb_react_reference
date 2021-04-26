@@ -1,15 +1,43 @@
-import { Message } from './components/Message';
+import { useState, useCallback, useEffect } from "react";
 
-import './App.css';
+import { MessageFeild } from "./components/MessageField";
+import { AUTHORS } from "./utils/constants";
+import "./App.css";
 
 function App() {
+  const [messageList, setMessageList] = useState([]);
+
+  const handleAddMessage = useCallback((message) => {
+    setMessageList((prevMessageList) => [...prevMessageList, message]);
+  }, []);
+
+  useEffect(() => {
+    if (!messageList.length) {
+      return;
+    }
+
+    const lastMessage = messageList[messageList.length - 1];
+    let timeout;
+    if (lastMessage.author === AUTHORS.ME) {
+      timeout = setTimeout(
+        () =>
+          setMessageList((prevMessageList) => [
+            ...prevMessageList,
+            { text: "I AM BOT", author: AUTHORS.BOT },
+          ]),
+        1500
+      );
+    }
+
+    return () => clearTimeout(timeout);
+  }, [messageList]);
+
   return (
     <div className="app">
-      {/* инлайновые стили здесь - в демонстрационных целях, лучше использовать css */}
-      <div style={{ marginLeft: '40px' }}>
-        <h1 className="header">Hello React</h1>
+      <div className="headerWrap">
+        <h3 className="header">My messenger</h3>
       </div>
-      <Message text="hi! i am a message" />
+      <MessageFeild onAddMessage={handleAddMessage} messageList={messageList} />
     </div>
   );
 }
